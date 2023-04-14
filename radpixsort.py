@@ -1,36 +1,67 @@
 import cv2,os,glob,shutil,ffmpeg
-from random import randrange
-from perlin_noise import PerlinNoise
 import numpy as np,random
 import numpy
-import math
 from pixelsort import pixelsort
 from PIL import Image
 
+print (" ")
+print (" ___________________________________")
+print ("|                    __             |")
+print ("|    _________ _____/ /             |")
+print ("|   / ___/ __ `/ __  /              |")
+print ("|  / /  / /_/ / /_/ /               |")
+print ("| /_/   \__,_/\__,_/                |")
+print ("|           ____  (_)  __           |")
+print ("|          / __ \/ / |/_/           |")
+print ("|         / /_/ / />  <             |")
+print ("|        / .___/_/_/|_|        __   |")
+print ("|       /_/   _________  _____/ /_  |")
+print ("|            / ___/ __ \/ ___/ __/  |")
+print ("|           (__  ) /_/ / /  / /_    |")
+print ("|          /____/\____/_/   \__/    |")
+print ("|___________________________________|")
+print ("|                                   |")
+print ("| radpixsort.py v0.1 2023           |")
+print ("| \ \ radial blur                   |")
+print ("|       && pixel sort               |")
+print ("|           video algorithm         |")
+print ("|                                   |")
+print ("|___________________________________|")
+print ("|                                   |")
+print ("| dev@niklausiff.ch                 |")
+print ("| https://www.niklausiff.ch         |")
+print ("|___________________________________|")
+print (" ")
+
+print (">>> 0/3 settings")
+print ("_____________________________________")
+print (" ")
+
 # input values
-# print ("video width")
-# w = int(input("> value: "))
-# print ("video height")
-# h = int(input("> value: "))
-# print ("how many tiles")
-# howMany = int(input("> value: "))
-# print ("tile size")
-# tileSize = int(input("> value: "))
-w = 1000
-h = 1000
-howMany = 100
-tileSize = 50
-angle = 90
-threshL = 0.3
-threshU = 0.7
-blur = 0.009
-iterations = 200
+print ("video width")
+w = int(input("> value: "))
+print ("video height")
+h = int(input("> value: "))
+print ("angle for the pixel sort algorithm")
+angle = int(input("> value: "))
+print ("lower threshold (0-1)")
+threshL = float(input("> value: "))
+print ("upper threshold (0-1)")
+threshU = float(input("> value: "))
+print ("blur amount (0-1)")
+blur = float(input("> value: "))
+print ("how many radial blur iterations")
+iterations = int(input("> value: "))
+print ("do you want a frame preview (y/n)")
+testFrame = input("> value: ")
 randomPix = []
 randomPixCopy = []
 pixels = []
 n = []
 
-# img = './screen.png'
+print ("_____________________________________")
+print (" ")
+print (">>> 1/3 create folders")
 
 # create new folders / delete if already exists
 dir = './'
@@ -49,6 +80,7 @@ os.mkdir(newpatho)
 
 # pixSort function
 def pixSort(img):
+    # resize image and convert to openCV
     noScale = Image.open(img)
     image = noScale.resize((w,h))
     cvimg = cv2.cvtColor(numpy.array(image), cv2.COLOR_RGB2BGR)
@@ -66,14 +98,17 @@ def pixSort(img):
         tmp2 = cv2.remap(cvimg, shrinkMapx, shrinkMapy, cv2.INTER_LINEAR,borderMode=cv2.BORDER_REFLECT)
         cvimg = cv2.addWeighted(tmp1, 0.5, tmp2, 0.5, 0)
 
+    # pixel sort algorithm
     pilimg = Image.fromarray(cvimg)
     newImg = pixelsort(pilimg,angle=angle,lower_threshold=threshL,upper_threshold=threshU)
     newImg = pixelsort(newImg,lower_threshold=threshL,upper_threshold=threshU)
+    
+    # save img/show preview
     newImg = newImg.convert('RGB')
-    # newImg.show()
-    newImg.save(os.path.join(newpatho+img[4:]))
-
-# pixSort(img)
+    if testFrame == 'y':
+        newImg.show()
+    else:
+        newImg.save(os.path.join(newpatho+img[4:]))
 
 # get movie
 getVideo = []
@@ -95,10 +130,27 @@ for filename in os.listdir(dir):
 pathog = newpathog+'/'
 jpg_list = sorted(glob.glob(pathog + "*.jpg"))
 
-# apply gridPix
-# pixSort(jpg_list[40])
+# get test frame
+if testFrame == 'y':
+    print ("_____________________________________")
+    print (" ")
+    print (">>> 1.5/3 show test frame")
+    pixSort(jpg_list[random.randint(0,len(jpg_list))])
+    testFrame = 'n'
+    input("> press ENTER to continue..")
+
+print ("_____________________________________")
+print (" ")
+print (">>> 2/3 apply radpixsort to frames")
+print ("_____________________________________")
+
+# apply pixSort and radial blur
 for x in range(len(jpg_list)):
     pixSort(jpg_list[x])
+
+print (" ")
+print (">>> 3/3 create new video")
+print ("_____________________________________")
 
 # create new video
 (
@@ -107,3 +159,25 @@ for x in range(len(jpg_list)):
     .output('untitled.mp4')
     .run(quiet=True,overwrite_output=True)
 )
+
+print (" ")
+print (" ___________________________________")
+print ("|                                   |")
+print ("| finished                          |")
+print ("|___________________________________|")
+print ("|                                   |")
+print ("| new video:                        |")
+print ("|   ./untitled.mp4                  |")
+print ("|                                   |")
+print ("| orignial frames:                  |")
+print ("|   ./og/                           |")
+print ("|                                   |")
+print ("| processed frames:                 |")
+print ("|   ./output/                       |")
+print ("|                                   |")
+print ("|___________________________________|")
+print ("|                                   |")
+print ("| dev@niklausiff.ch                 |")
+print ("| https://www.niklausiff.ch         |")
+print ("|___________________________________|")
+print (" ")
