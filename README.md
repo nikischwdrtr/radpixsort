@@ -14,5 +14,5 @@ python packages you need:
 3. navigate to the folder with script and video (cd)
 4. run 'python3 radpixsort.py'
 
-this script isn't meant to be perfomative or anything, it works really slow, rendering out every single frame of the video and processes it.
+this script isn't meant to be perfomative or anything, it works really slow, rendering out every single frame of the video and processes it
 the rawness of the process makes it interesting tho
