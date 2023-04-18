@@ -15,6 +15,7 @@ python packages you need:
 4. run 'python3 radpixsort.py'
 
 you can always kill the running script and just rerun it
+
 your progress won't be lost, you will be ask if you want to continue, or reset everything
 
 this script isn't meant to be perfomative or anything, it works really slow, rendering out every single frame of the video and processes it
