@@ -14,9 +14,8 @@ python packages you need:
 3. navigate to the folder with script and video (cd)
 4. run 'python3 radpixsort.py'
 
-you can always kill the running script and just rerun it
-
+you can always kill the running script and just rerun it <br />
 your progress won't be lost, you will be ask if you want to continue, or reset everything
 
-this script isn't meant to be perfomative or anything, it works really slow, rendering out every single frame of the video and processes it
+this script isn't meant to be perfomative or anything, it works really slow, rendering out every single frame of the video and processes it <br />
 the rawness of the process makes it interesting tho
